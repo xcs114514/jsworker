@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-  schedule:
-        # Runs everyday at 1:00 AM
-        - cron: "0 1 * * *"
 
 permissions:
   contents: write
@@ -28,13 +25,9 @@ jobs:
         run: |
           npm install -g javascript-obfuscator
 
-      - name: Clone BPB workjs
+      - name: Obfuscate origin.js
         run: |
-          wget -O origin.js https://github.com/leegical/demoPanel/edit/main/origin.js
-      
-      - name: Obfuscate BPB worker js
-        run: |
-          javascript-obfuscator origin.js --output _worker.js \
+          javascript-obfuscator ./origin.js --output _worker.js \
           --compact true \
           --control-flow-flattening true \
           --control-flow-flattening-threshold 1 \
@@ -52,6 +45,6 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           branch: main
-          commit_message: ':arrow_up: update latest bpb panel'
+          commit_message: ':arrow_up: update obfuscated worker'
           commit_author: 'github-actions[bot] <github-actions[bot]@users.noreply.github.com>'
           push_options: '--set-upstream'
